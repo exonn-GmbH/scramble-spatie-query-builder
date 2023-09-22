@@ -1,0 +1,34 @@
+{
+    "name": "adjustmentlayer/scramble-query-builder",
+    "keywords": [
+        "extension",
+        "spatie",
+        "query-builder",
+        "scramble",
+        "openapi"
+    ],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Laya\\ScrambleQueryBuilder\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Volodymyr Rudomanenko",
+            "email": "rudomanenkovladimir@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.0",
+        "dedoc/scramble": "0.8.3",
+        "spatie/laravel-query-builder": "^5.0"
+    },
+    "require-dev": {
+        "laravel/pint": "^v1.1.0"
+    },
+    "scripts": {
+        "format": "vendor/bin/pint"
+    }
+}
