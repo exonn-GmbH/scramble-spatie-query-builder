@@ -52,3 +52,6 @@ public function boot(): void
 }
 ```
 2. Customize for your needs
+
+## TODO
+- [ ] Add tests
