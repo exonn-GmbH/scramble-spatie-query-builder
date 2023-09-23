@@ -2,7 +2,7 @@
 ![Preview](./.github/preview.png)
 
 ## Introduction
-This is the Scramble extension, which detects the usage of the Spatie query builder in your routes and automatically adds applicable query parameters to the openapi definitions.
+This is the Scramble extension, which detects the usage of the Spatie query builder in your api routes and automatically adds applicable query parameters to the openapi definitions.
 
 ## Installation
 
