@@ -9,10 +9,10 @@ composer install laya/scramble-query-builder
 ## Usage
 In your `config/scramble.php`
 ```php
-    'extensions' => [
-        // ...
-        \Laya\ScrambleQueryBuilder\Extension::class
-    ],
+'extensions' => [
+    // ...
+    \Laya\ScrambleQueryBuilder\Extension::class
+],
 ```
 ## Customization
 In your ```AppServiceProvider.php```
