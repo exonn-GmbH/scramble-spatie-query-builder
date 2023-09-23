@@ -1,5 +1,5 @@
 # Scramble extension for Spatie Query Builder
-
+![Preview](./.github/preview.png)
 ## Installation
 
 ```
