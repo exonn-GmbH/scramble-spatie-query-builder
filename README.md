@@ -23,16 +23,17 @@ composer install laya/scramble-query-builder
 ## Customization
 By default this extension automatically updates openapi definition for you, but if you want to customize its default behaviour, you can do it in the following way
 
-In your ```AppServiceProvider.php```
+1. Open your ```AppServiceProvider.php``` and add the following code example in the ```boot``` method
+
 ```php
 public function boot(): void
 {
     // ...
     Extension::hook(function(Operation $operation, Parameter $parameter, \Laya\ScrambleQueryBuilder\QueryBuilderFeature $feature) {
         if($feature->getMethodName() === 'allowedIncludes') {
-            // Customize examples
-  $parameter->example(['repositories.issues', 'repositories']);
-            // Customize description
+            // Customize the example
+            $parameter->example(['repositories.issues', 'repositories']);
+            // Customize the description
             $parameter->description('Allows you to include additional model relations in the response');
         }
             
@@ -50,3 +51,4 @@ public function boot(): void
     });
 }
 ```
+2. Customize for your needs
