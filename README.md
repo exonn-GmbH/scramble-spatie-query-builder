@@ -2,7 +2,7 @@
 ![Preview](./.github/preview.png)
 
 ## Introduction
-This is the Scramble extension, which detects the usage of the Spatie query builder in your api routes and automatically adds applicable query parameters to the openapi definitions.
+This is the Scramble extension, which detects the usage of the Spatie query builder in your api routes and automatically adds applicable query parameters to the openapi definition.
 
 ## Installation
 
@@ -11,14 +11,18 @@ composer install laya/scramble-query-builder
 ```
 
 ## Usage
-In your `config/scramble.php`
+1. Register the extension in your `config/scramble.php` file
 ```php
 'extensions' => [
     // ...
     \Laya\ScrambleQueryBuilder\Extension::class
 ],
 ```
+2. You are done, now check your Scramble docs for routes, which use Spatie query builder, you should see new query parameters documented
+
 ## Customization
+By default this extension automatically updates openapi definition for you, but if you want to customize its default behaviour, you can do it in the following way
+
 In your ```AppServiceProvider.php```
 ```php
 public function boot(): void
@@ -26,9 +30,9 @@ public function boot(): void
     // ...
     Extension::hook(function(Operation $operation, Parameter $parameter, \Laya\ScrambleQueryBuilder\QueryBuilderFeature $feature) {
         if($feature->getMethodName() === 'allowedIncludes') {
-            // Provide your own examples
-            $parameter->example(['repositories.issues', 'repositories']);
-            // Provide your own description
+            // Customize examples
+  $parameter->example(['repositories.issues', 'repositories']);
+            // Customize description
             $parameter->description('Allows you to include additional model relations in the response');
         }
             
