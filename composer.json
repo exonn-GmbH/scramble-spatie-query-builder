@@ -1,5 +1,6 @@
 {
     "name": "laya/scramble-query-builder",
+    "description": "This is the Scramble extension, which detects the usage of the Spatie query builder and adds applicable query parameters to the openapi definitions",
     "keywords": [
         "extension",
         "spatie",
