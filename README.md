@@ -18,7 +18,7 @@ composer install laya/scramble-query-builder
     \Laya\ScrambleQueryBuilder\Extension::class
 ],
 ```
-2. You are done, now check your Scramble docs for routes, which use Spatie query builder, you should see new query parameters documented
+2. You are done, now check your Scramble docs for routes that use Spatie query builder, you should see new query parameters documented
 
 ## Customization
 By default this extension automatically updates openapi definition for you, but if you want to customize its default behaviour, you can do it in the following way
