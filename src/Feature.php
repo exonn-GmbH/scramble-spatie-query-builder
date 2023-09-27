@@ -1,8 +1,8 @@
 <?php
 
-namespace Laya\ScrambleQueryBuilder;
+namespace Layerok\ScrambleSpatieQueryBuilder;
 
-class QueryBuilderFeature
+class Feature
 {
     const AllowedIncludesMethod = 'allowedIncludes';
 
