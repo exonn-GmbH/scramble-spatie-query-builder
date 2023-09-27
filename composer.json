@@ -1,5 +1,5 @@
 {
-    "name": "laya/scramble-query-builder",
+    "name": "layerok/scramble-spatie-query-builder",
     "description": "This is the Scramble extension, which detects the usage of the Spatie query builder and adds applicable query parameters to the openapi definitions",
     "keywords": [
         "extension",
@@ -11,7 +11,7 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Laya\\ScrambleQueryBuilder\\": "src/"
+            "Layerok\\ScrambleSpatieQueryBuilder\\": "src/"
         }
     },
     "authors": [

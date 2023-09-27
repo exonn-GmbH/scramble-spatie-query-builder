@@ -7,7 +7,7 @@ This is the Scramble extension, which detects the usage of the Spatie query buil
 ## Installation
 
 ```
-composer install laya/scramble-query-builder
+composer install layerok/scramble-spatie-query-builder
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ composer install laya/scramble-query-builder
 ```php
 'extensions' => [
     // ...
-    \Laya\ScrambleQueryBuilder\Extension::class
+    \Layerok\ScrambleSpatieQueryBuilder\Extension::class
 ],
 ```
 2. You are done, now check your Scramble docs for routes that use Spatie query builder, you should see new query parameters documented

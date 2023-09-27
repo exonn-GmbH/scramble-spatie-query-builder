@@ -1,6 +1,6 @@
 <?php
 
-namespace Laya\ScrambleQueryBuilder;
+namespace Layerok\ScrambleSpatieQueryBuilder;
 
 use Dedoc\Scramble\Extensions\OperationExtension;
 use Dedoc\Scramble\Support\Generator\Operation;
@@ -21,35 +21,35 @@ class Extension extends OperationExtension
     }
 
     /**
-     * @return QueryBuilderFeature[]
+     * @return Feature[]
      */
     public function features(): array
     {
         return [
-            new QueryBuilderFeature(
-                QueryBuilderFeature::AllowedIncludesMethod,
+            new Feature(
+                Feature::AllowedIncludesMethod,
                 $this->queryParameterKey('include'),
                 ['posts', 'posts.comments', 'books']
             ),
-            new QueryBuilderFeature(
-                QueryBuilderFeature::AllowedFiltersMethod,
+            new Feature(
+                Feature::AllowedFiltersMethod,
                 $this->queryParameterKey('filter'),
                 ['[name]=john', '[email]=gmail']
             ),
-            new QueryBuilderFeature(
-                QueryBuilderFeature::AllowedSortsMethod,
+            new Feature(
+                Feature::AllowedSortsMethod,
                 $this->queryParameterKey('sort'),
                 ['title', '-title', 'title,-id']
             ),
-            new QueryBuilderFeature(
-                QueryBuilderFeature::AllowedFieldsMethod,
+            new Feature(
+                Feature::AllowedFieldsMethod,
                 $this->queryParameterKey('fields'),
                 ['id', 'title', 'posts.id']
             ),
         ];
     }
 
-    public function runHooks(Operation $operation, Parameter $parameter, QueryBuilderFeature $feature): mixed
+    public function runHooks(Operation $operation, Parameter $parameter, Feature $feature): mixed
     {
         foreach (self::$hooks as $hook) {
             $halt = $hook($operation, $parameter, $feature);
