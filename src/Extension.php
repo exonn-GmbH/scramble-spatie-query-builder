@@ -1,6 +1,6 @@
 <?php
 
-namespace Layerok\ScrambleSpatieQueryBuilder;
+namespace Exonn\ScrambleSpatieQueryBuilder;
 
 use Dedoc\Scramble\Extensions\OperationExtension;
 use Dedoc\Scramble\Support\Generator\Operation;
