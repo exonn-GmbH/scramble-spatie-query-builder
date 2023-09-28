@@ -1,6 +1,6 @@
 <?php
 
-namespace Layerok\ScrambleSpatieQueryBuilder;
+namespace Exonn\ScrambleSpatieQueryBuilder;
 
 class Feature
 {
@@ -21,15 +21,18 @@ class Feature
 
     }
 
-    public function getMethodName(): string {
+    public function getMethodName(): string
+    {
         return $this->methodName;
     }
 
-    public function getQueryParameterKey(): string {
+    public function getQueryParameterKey(): string
+    {
         return $this->queryParameterKey;
     }
 
-    public function getExample(): array {
+    public function getExample(): array
+    {
         return $this->example;
     }
 
@@ -38,7 +41,8 @@ class Feature
         return $this->values;
     }
 
-    public function setValues(array $values) {
+    public function setValues(array $values)
+    {
         $this->values = $values;
     }
 }
