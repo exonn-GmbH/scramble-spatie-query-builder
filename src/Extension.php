@@ -63,7 +63,7 @@ class Extension extends OperationExtension
             );
 
             if (! $methodCall) {
-                return;
+                continue;
             }
 
             $parameter = new Parameter($feature->getQueryParameterKey(), 'query');
