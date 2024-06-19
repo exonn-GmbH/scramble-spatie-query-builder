@@ -15,7 +15,11 @@ composer install exonn-gmbh/scramble-spatie-query-builder
 ```php
 'extensions' => [
     // ...
-    \Exonn\ScrambleSpatieQueryBuilder\Extension::class
+    \Exonn\ScrambleSpatieQueryBuilder\AllowedFieldsExtension::class
+    \Exonn\ScrambleSpatieQueryBuilder\AllowedSortsExtension::class
+    \Exonn\ScrambleSpatieQueryBuilder\AllowedFiltersExtension::class
+    \Exonn\ScrambleSpatieQueryBuilder\AllowedFilterModesExtension::class
+    \Exonn\ScrambleSpatieQueryBuilder\AllowedIncludesExtension::class
 ],
 ```
 2. You are done, now check your Scramble docs for routes that use Spatie query builder, you should see new query parameters documented
@@ -29,25 +33,11 @@ By default this extension automatically updates openapi definition for you, but 
 public function boot(): void
 {
     // ...
-    Extension::hook(function(Operation $operation, Parameter $parameter, \Laya\ScrambleQueryBuilder\QueryBuilderFeature $feature) {
-        if($feature->getMethodName() === 'allowedIncludes') {
-            // Customize the example
-            $parameter->example(['repositories.issues', 'repositories']);
-            // Customize the description
-            $parameter->description('Allows you to include additional model relations in the response');
-        }
-            
-        if($feature->getMethodName() === 'allowedSorts') { 
-            // ...
-        }
-            
-        if($feature->getMethodName() === 'allowedFields') {
-            // ...
-        }
-            
-        if($feature->getMethodName() === 'allowedFilters') {
-             // ...
-        }
+    AllowedIncludesExtension::hook(function(Operation $operation, Parameter $parameter) {
+        // Customize the example
+        $parameter->example(['repositories.issues', 'repositories']);
+        // Customize the description
+        $parameter->description('Allows you to include additional model relations in the response');
     });
 }
 ```
