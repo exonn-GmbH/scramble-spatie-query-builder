@@ -45,4 +45,17 @@ class Feature
     {
         $this->values = $values;
     }
+
+    public function isForIncludes(): bool {
+        return $this->methodName === self::AllowedIncludesMethod;
+    }
+    public function isForFields(): bool {
+        return $this->methodName === self::AllowedFieldsMethod;
+    }
+    public function isForFilters(): bool {
+        return $this->methodName === self::AllowedFiltersMethod;
+    }
+    public function isForSorts(): bool {
+        return $this->methodName === self::AllowedSortsMethod;
+    }
 }
