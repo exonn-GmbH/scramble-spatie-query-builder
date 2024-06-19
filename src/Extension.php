@@ -3,7 +3,6 @@
 namespace Exonn\ScrambleSpatieQueryBuilder;
 
 use Dedoc\Scramble\Extensions\OperationExtension;
-use Dedoc\Scramble\Infer\Reflector\ClassReflector;
 use Dedoc\Scramble\Infer\Services\FileParser;
 use Dedoc\Scramble\Support\Generator\Operation;
 use Dedoc\Scramble\Support\Generator\Parameter;
@@ -68,11 +67,24 @@ class Extension extends OperationExtension
 
             $parameter = new Parameter($feature->getQueryParameterKey(), 'query');
 
-            $parameter->setSchema(
-                Schema::fromType(new StringType())
-            );
+            $values = $this->inferValues($methodCall, $routeInfo);
 
-            $feature->setValues($this->inferValues($methodCall, $routeInfo));
+            $type = new StringType();
+
+            // todo: uncomment when scrumble merges the PR https://github.com/dedoc/scramble/pull/424
+            // if($feature->isForFields() || $feature->isForIncludes()) {
+                // $type->enum($values);
+                // $parameter->setStyle('form');
+                // $parameter->setExplode('false');
+            // }
+
+            if($feature->isForSorts()) {
+                $type->enum($values);
+            }
+
+            $parameter->setSchema(Schema::fromType($type));
+
+            $feature->setValues($values);
 
             $parameter->example($feature->getExample());
 
