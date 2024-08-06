@@ -14,7 +14,7 @@ class AllowedFilterModesExtension extends OperationExtension {
     use Hookable;
     const MethodName = 'allowedFilters';
     public array $examples = ['[name]=starts_with', '[email]=exact'];
-    public string $configKey = 'query-builder.parameters.filter_mode';
+    public string $configKey = 'filter_mode';
 
     public function handle(Operation $operation, RouteInfo $routeInfo)
     {
