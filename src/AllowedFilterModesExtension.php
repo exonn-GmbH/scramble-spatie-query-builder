@@ -28,7 +28,7 @@ class AllowedFilterModesExtension extends OperationExtension {
 
         $values = $helper->inferValues($methodCall, $routeInfo);
 
-        $parameter = new Parameter(config($this->configKey), 'query');
+        $parameter = new Parameter($this->configKey, 'query');
 
         $objectType = new ObjectType();
 
