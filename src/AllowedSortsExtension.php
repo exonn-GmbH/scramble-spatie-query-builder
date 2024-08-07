@@ -33,12 +33,12 @@ class AllowedSortsExtension extends OperationExtension {
             array_map(fn($value) => '-' . $value, $values)
         ));
 
+              $objectType = new ObjectType();
+        foreach($arrayType->items->enum as $value) {
+            $objectType->addProperty($value, new StringType());
+        }
         $parameter = new Parameter(config($this->configKey), 'query');
-
-        $parameter->setSchema(Schema::fromType((new AnyOf())->setItems([
-            new StringType(),
-            $arrayType,
-        ])))->example($this->examples);
+        $parameter->setSchema(Schema::fromType($objectType))->example($this->examples);
 
         $halt = $this->runHooks($operation, $parameter);
         if (! $halt) {
