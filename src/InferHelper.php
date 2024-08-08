@@ -17,9 +17,25 @@ class InferHelper {
             return [];
         }
 
-        // ->allowedIncludes(['posts', 'posts.author'])
         if ($methodCall->args[0]->value instanceof Node\Expr\Array_) {
-            return array_map(fn (Node\Expr\ArrayItem $item) => $item->value->value, $methodCall->args[0]->value->items);
+            return array_map(function (Node\Expr\ArrayItem $item) {
+
+                if ($item->value instanceof Node\Scalar\String_) {
+                    return $item->value->value;
+                }
+                if ($item->value instanceof Node\Expr\StaticCall) {
+                    // Check if the static call is AllowedSort::custom
+                    if ($item->value->class instanceof Node\Name
+                        && $item->value->class->toString() === 'Spatie\QueryBuilder\AllowedSort'
+                        && $item->value->name instanceof Node\Identifier
+                        && $item->value->name->name === 'custom') {
+                        $customSortName = $item->value->args[0]->value->value;
+                        return $customSortName;
+                    }
+                    return $this->inferValueFromStaticCall($item->value);
+                }
+                return self::NOT_SUPPORTED_KEY;
+            }, $methodCall->args[0]->value->items);
         }
 
         // ->allowedIncludes('posts', 'posts.author')
