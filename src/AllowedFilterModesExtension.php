@@ -10,37 +10,39 @@ use Dedoc\Scramble\Support\Generator\Types\ArrayType;
 use Dedoc\Scramble\Support\Generator\Types\ObjectType;
 use Dedoc\Scramble\Support\RouteInfo;
 
-class AllowedFilterModesExtension extends OperationExtension {
+class AllowedFilterModesExtension extends OperationExtension
+{
     use Hookable;
+
     const MethodName = 'allowedFilters';
+
     public array $examples = ['[name]=starts_with', '[email]=exact'];
-    public string $configKey = 'filter_mode';
 
     public function handle(Operation $operation, RouteInfo $routeInfo)
     {
-        $helper = new InferHelper();
+        $helper = new InferHelper;
 
-        $methodCall = Utils::findMethodCall($routeInfo,self::MethodName);
+        $methodCall = Utils::findMethodCall($routeInfo, self::MethodName);
 
-        if(!$methodCall) {
+        if (! $methodCall) {
             return;
         }
 
         $values = $helper->inferValues($methodCall, $routeInfo);
 
-        $parameter = new Parameter($this->configKey, 'query');
+        $parameter = new Parameter(config(AllowedFilter::FilterModesQueryParamConfigKey), 'query');
 
-        $objectType = new ObjectType();
+        $objectType = new ObjectType;
 
-        $filterMode = new ArrayType();
+        $filterMode = new ArrayType;
         $filterMode->items->enum([
             'starts_with',
             'ends_with',
             'exact',
-            'partial'
+            'partial',
         ]);
 
-        foreach($values as $value) {
+        foreach ($values as $value) {
             $objectType->addProperty($value, $filterMode);
         }
         $parameter->setSchema(Schema::fromType($objectType))

@@ -17,24 +17,26 @@ class AllowedSortsExtension extends OperationExtension
     use Hookable;
 
     const MethodName = 'allowedSorts';
+
     public array $examples = ['title', '-title', 'title,-id'];
+
     public string $configKey = 'query-builder.parameters.sort';
 
     public function handle(Operation $operation, RouteInfo $routeInfo)
     {
-        $helper = new InferHelper();
+        $helper = new InferHelper;
 
         $methodCall = Utils::findMethodCall($routeInfo, self::MethodName);
 
-        if (!$methodCall) {
+        if (! $methodCall) {
             return;
         }
 
         $values = $helper->inferValues($methodCall, $routeInfo);
-        $arrayType = new ArrayType();
+        $arrayType = new ArrayType;
         $arrayType->items->enum(array_merge(
             $values,
-            array_map(fn($value) => '-' . $value, $values)
+            array_map(fn ($value) => '-'.$value, $values)
         ));
 
         $objectType = new ObjectType();
@@ -42,7 +44,11 @@ class AllowedSortsExtension extends OperationExtension
             $objectType->addProperty($value, new StringType());
         }
         $parameter = new Parameter(config($this->configKey), 'query');
-        $parameter->setSchema(Schema::fromType($objectType))->example($this->examples);
+
+        $parameter->setSchema(Schema::fromType((new AnyOf())->setItems([
+            new StringType(),
+            $arrayType,
+        ])))->example($this->examples);
 
         $halt = $this->runHooks($operation, $parameter);
         if (!$halt) {

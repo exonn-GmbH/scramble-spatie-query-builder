@@ -11,30 +11,35 @@ use Dedoc\Scramble\Support\Generator\Types\ArrayType;
 use Dedoc\Scramble\Support\Generator\Types\StringType;
 use Dedoc\Scramble\Support\RouteInfo;
 
-class AllowedIncludesExtension extends OperationExtension {
+class AllowedIncludesExtension extends OperationExtension
+{
     use Hookable;
+
     const MethodName = 'allowedIncludes';
-    public array $examples  =   ['posts', 'posts.comments', 'books'];
+
+    public array $examples = ['posts', 'posts.comments', 'books'];
+
     public string $configKey = 'query-builder.parameters.include';
+
     public function handle(Operation $operation, RouteInfo $routeInfo)
     {
-        $helper = new InferHelper();
+        $helper = new InferHelper;
 
         $methodCall = Utils::findMethodCall($routeInfo, self::MethodName);
 
-        if(!$methodCall) {
+        if (! $methodCall) {
             return;
         }
 
         $values = $helper->inferValues($methodCall, $routeInfo);
-        $arrayType = new ArrayType();
+        $arrayType = new ArrayType;
         $arrayType->items->enum($values);
-        
+
         $parameter = new Parameter(config($this->configKey), 'query');
 
-        $parameter->setSchema(Schema::fromType((new AnyOf())->setItems([
+        $parameter->setSchema(Schema::fromType((new AnyOf)->setItems([
             $arrayType,
-            new StringType(),
+            new StringType,
         ])))->example($this->examples);
 
         $halt = $this->runHooks($operation, $parameter);

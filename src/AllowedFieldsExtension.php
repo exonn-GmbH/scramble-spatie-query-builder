@@ -11,31 +11,34 @@ use Dedoc\Scramble\Support\Generator\Types\ArrayType;
 use Dedoc\Scramble\Support\Generator\Types\StringType;
 use Dedoc\Scramble\Support\RouteInfo;
 
-class AllowedFieldsExtension extends OperationExtension {
+class AllowedFieldsExtension extends OperationExtension
+{
     use Hookable;
-    const MethodName = 'allowedFields';
-    public array $examples  =  ['id', 'title', 'posts.id'];
-    public string $configKey = 'query-builder.parameters.fields';
 
+    const MethodName = 'allowedFields';
+
+    public array $examples = ['id', 'title', 'posts.id'];
+
+    public string $configKey = 'query-builder.parameters.fields';
 
     public function handle(Operation $operation, RouteInfo $routeInfo)
     {
-        $helper = new InferHelper();
-        $methodCall = Utils::findMethodCall($routeInfo,self::MethodName);
+        $helper = new InferHelper;
+        $methodCall = Utils::findMethodCall($routeInfo, self::MethodName);
 
-        if(!$methodCall) {
+        if (! $methodCall) {
             return;
         }
 
         $parameter = new Parameter(config($this->configKey), 'query');
 
         $values = $helper->inferValues($methodCall, $routeInfo);
-        $arrayType = new ArrayType();
+        $arrayType = new ArrayType;
         $arrayType->items->enum($values);
 
-        $parameter->setSchema(Schema::fromType((new AnyOf())->setItems([
+        $parameter->setSchema(Schema::fromType((new AnyOf)->setItems([
             $arrayType,
-            new StringType(),
+            new StringType,
         ])))->example($this->examples);
 
         $halt = $this->runHooks($operation, $parameter);
