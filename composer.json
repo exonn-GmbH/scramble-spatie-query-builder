@@ -23,7 +23,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": "^8.0",
-        "dedoc/scramble": "^0.10.0",
+        "dedoc/scramble": "^0.11.0",
         "spatie/laravel-query-builder": "^6.0"
     },
     "require-dev": {
