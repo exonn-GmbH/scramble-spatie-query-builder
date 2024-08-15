@@ -5,8 +5,10 @@ namespace Exonn\ScrambleSpatieQueryBuilder;
 use Dedoc\Scramble\Support\Generator\Operation;
 use Dedoc\Scramble\Support\Generator\Parameter;
 
-trait Hookable {
+trait Hookable
+{
     public static array $hooks = [];
+
     public static function hook(\Closure $cb)
     {
         self::$hooks[] = $cb;
@@ -23,5 +25,4 @@ trait Hookable {
 
         return false;
     }
-
 }
