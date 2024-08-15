@@ -6,10 +6,12 @@ use Dedoc\Scramble\Support\RouteInfo;
 use PhpParser\Node;
 use PhpParser\NodeFinder;
 
-class Utils {
-    public static function findMethodCall(RouteInfo $routeInfo, string $methodName): ?Node\Expr\MethodCall {
+class Utils
+{
+    public static function findMethodCall(RouteInfo $routeInfo, string $methodName): ?Node\Expr\MethodCall
+    {
         /** @var Node\Expr\MethodCall|null $methodCall */
-        $methodCall = (new NodeFinder())->findFirst(
+        $methodCall = (new NodeFinder)->findFirst(
             $routeInfo->methodNode(),
             fn (Node $node) =>
                 // todo: check if the methodName is called on QueryBuilder

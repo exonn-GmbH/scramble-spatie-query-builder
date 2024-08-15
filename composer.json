@@ -14,6 +14,11 @@
             "Exonn\\ScrambleSpatieQueryBuilder\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Exonn\\ScrambleSpatieQueryBuilder\\Tests\\": "tests"
+        }
+    },
     "authors": [
         {
             "name": "Volodymyr Rudomanenko",
@@ -22,14 +27,23 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": "^8.0",
-        "dedoc/scramble": "0.9.0",
+        "php": "^8.1",
+        "dedoc/scramble": "^0.9.0",
         "spatie/laravel-query-builder": "^5.0"
     },
     "require-dev": {
-        "laravel/pint": "^v1.1.0"
+        "laravel/pint": "^v1.1.0",
+        "pestphp/pest": "^2.34",
+        "nunomaduro/collision": "^7.0|^8.0",
+        "orchestra/testbench": "^8.0|^9.0",
+        "pestphp/pest-plugin-laravel": "^2.3"
     },
     "scripts": {
         "format": "vendor/bin/pint"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }
