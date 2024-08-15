@@ -8,7 +8,7 @@ test('test AllowedFilterModesExtensions', function () {
 
     $queryParam = 'filter_mode';
 
-    config()->set(AllowedFilter::FILTER_MODE_QUERY_PARAM_CONFIG_KEY, $queryParam);
+    config()->set(AllowedFilter::FilterModesQueryParamConfigKey, $queryParam);
 
     $result = generateForRoute(function () {
         return Route::get('test', [
