@@ -39,7 +39,8 @@
         "pestphp/pest-plugin-laravel": "^2.3"
     },
     "scripts": {
-        "format": "vendor/bin/pint"
+        "format": "vendor/bin/pint",
+        "test": "vendor/bin/pest"
     },
     "config": {
         "allow-plugins": {
