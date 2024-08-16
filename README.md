@@ -43,3 +43,21 @@ public function boot(): void
 ```
 2. Customize for your needs
 
+## Development
+* start bash in dev environment
+    ```bash
+    docker compose run php-cli bash
+    ``` 
+* update/install dependencies
+    ```bash
+    docker compose run php-cli composer update 
+    ```
+* run tests 
+    ```bash
+    docker compose run php-cli vendor/bin/pest
+    ``` 
+* stop all containers
+    ```bash
+    docker compose down --remove-orphans
+    ``` 
+
