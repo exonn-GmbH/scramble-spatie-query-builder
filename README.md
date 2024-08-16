@@ -15,11 +15,11 @@ composer install exonn-gmbh/scramble-spatie-query-builder
 ```php
 'extensions' => [
     // ...
-    \Exonn\ScrambleSpatieQueryBuilder\AllowedFieldsExtension::class
-    \Exonn\ScrambleSpatieQueryBuilder\AllowedSortsExtension::class
-    \Exonn\ScrambleSpatieQueryBuilder\AllowedFiltersExtension::class
-    \Exonn\ScrambleSpatieQueryBuilder\AllowedFilterModesExtension::class
-    \Exonn\ScrambleSpatieQueryBuilder\AllowedIncludesExtension::class
+    \Exonn\ScrambleSpatieQueryBuilder\AllowedFieldsExtension::class,
+    \Exonn\ScrambleSpatieQueryBuilder\AllowedSortsExtension::class,
+    \Exonn\ScrambleSpatieQueryBuilder\AllowedFiltersExtension::class,
+    \Exonn\ScrambleSpatieQueryBuilder\AllowedIncludesExtension::class,
+//    \Exonn\ScrambleSpatieQueryBuilder\AllowedFilterModesExtension::class
 ],
 ```
 2. You are done, now check your Scramble docs for routes that use Spatie query builder, you should see new query parameters documented
