@@ -45,7 +45,8 @@ class AllowedSortsExtension extends OperationExtension
         }
         $parameter = new Parameter(config($this->configKey), 'query');
 
-        $parameter->setSchema(Schema::fromType($objectType))
+        $parameter->setSchema(Schema::fromType(new StringType()))
+          ->description('Sort the results by the given fields. Available fields: ' . implode(', ', array_map(fn($value) => "`$value`", $arrayType->items->enum)) . ". You can sort by multiple options by separating them with a comma. To sort in descending order, use - sign in front of the sort, for example: `-name`.")
             ->example($this->examples);
 
         $halt = $this->runHooks($operation, $parameter);

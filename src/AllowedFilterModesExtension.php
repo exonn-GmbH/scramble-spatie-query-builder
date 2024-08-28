@@ -30,7 +30,7 @@ class AllowedFilterModesExtension extends OperationExtension
 
         $values = $helper->inferValues($methodCall, $routeInfo);
 
-        $parameter = new Parameter(config(AllowedFilter::FilterModesQueryParamConfigKey)??"filter_mode", 'query');
+        $parameter = new Parameter(config(AllowedFilter::FilterModesQueryParamConfigKey), 'query');
 
         $objectType = new ObjectType;
 

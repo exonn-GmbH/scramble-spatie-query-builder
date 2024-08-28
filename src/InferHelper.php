@@ -20,7 +20,6 @@ class InferHelper
 
         if ($methodCall->args[0]->value instanceof Node\Expr\Array_) {
             return array_map(function (Node\Expr\ArrayItem $item) {
-
                 if ($item->value instanceof Node\Scalar\String_) {
                     return $item->value->value;
                 }
