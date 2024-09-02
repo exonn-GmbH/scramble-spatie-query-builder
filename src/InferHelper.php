@@ -24,6 +24,14 @@ class InferHelper
                     return $item->value->value;
                 }
                 if ($item->value instanceof Node\Expr\StaticCall) {
+
+                    if ($item->value->class instanceof Node\Name
+                        && $item->value->class->toString() === 'Spatie\QueryBuilder\AllowedFilter'
+                        && $item->value->name instanceof Node\Identifier
+                        && $item->value->name->name === 'scope') {
+                        $customSortName = $item->value->args[0]->value->value;
+                        return $customSortName;
+                    }
                     // Check if the static call is AllowedSort::custom
                     if ($item->value->class instanceof Node\Name
                         && $item->value->class->toString() === 'Spatie\QueryBuilder\AllowedSort'
@@ -34,13 +42,14 @@ class InferHelper
                     }
                     return $this->inferValueFromStaticCall($item->value);
                 }
+
                 return self::NOT_SUPPORTED_KEY;
             }, $methodCall->args[0]->value->items);
         }
 
         // ->allowedIncludes('posts', 'posts.author')
         if ($methodCall->args[0]->value instanceof Node\Scalar\String_) {
-            return array_map(fn (Node\Arg $arg) => $arg->value->value, $methodCall->args);
+            return array_map(fn(Node\Arg $arg) => $arg->value->value, $methodCall->args);
         }
 
         // ->allowedIncludes($this->includes)
@@ -70,18 +79,18 @@ class InferHelper
         $node = (new NodeFinder)
             ->findFirst(
                 $statements,
-                fn (Node $visitedNode) => $visitedNode instanceof Node\Stmt\ClassMethod && $visitedNode->name->name === $node->name->name
+                fn(Node $visitedNode) => $visitedNode instanceof Node\Stmt\ClassMethod && $visitedNode->name->name === $node->name->name
             );
 
         /** @var Node\Stmt\Return_|null $return */
         $return = (new NodeFinder)
-            ->findFirst($node->stmts, fn (Node $node) => $node instanceof Node\Stmt\Return_);
+            ->findFirst($node->stmts, fn(Node $node) => $node instanceof Node\Stmt\Return_);
 
-        if (! $return) {
+        if (!$return) {
             return [];
         }
 
-        if (! $return->expr instanceof Node\Expr\Array_) {
+        if (!$return->expr instanceof Node\Expr\Array_) {
             return [];
         }
 
@@ -124,15 +133,15 @@ class InferHelper
         $node = (new NodeFinder)
             ->findFirst(
                 $statements,
-                fn (Node $visitedNode) => $visitedNode instanceof Node\Stmt\Property && $visitedNode->props[0]->name->name === $node->name->name
+                fn(Node $visitedNode) => $visitedNode instanceof Node\Stmt\Property && $visitedNode->props[0]->name->name === $node->name->name
             );
 
-        if (! $node->props[0]->default instanceof Node\Expr\Array_) {
+        if (!$node->props[0]->default instanceof Node\Expr\Array_) {
             return [];
         }
 
         return array_map(
-            fn (Node\ArrayItem $item) => $item->value->value,
+            fn(Node\ArrayItem $item) => $item->value->value,
             $node->props[0]->default->items
         );
     }
