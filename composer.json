@@ -28,8 +28,10 @@
     "minimum-stability": "dev",
     "require": {
         "php": "^8.1",
-        "dedoc/scramble": "^0.11.0",
-        "spatie/laravel-query-builder": "^6.0"
+
+        "dedoc/scramble": "^0.9.0 || ^0.10.0 || ^0.11.0",
+        "spatie/laravel-query-builder": "^5.0 || ^6.0"
+
     },
     "require-dev": {
         "laravel/pint": "^v1.1.0",
@@ -39,7 +41,8 @@
         "pestphp/pest-plugin-laravel": "^2.3"
     },
     "scripts": {
-        "format": "vendor/bin/pint"
+        "format": "vendor/bin/pint",
+        "test": "vendor/bin/pest"
     },
     "config": {
         "allow-plugins": {
