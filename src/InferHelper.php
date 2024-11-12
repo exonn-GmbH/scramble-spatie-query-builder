@@ -6,6 +6,8 @@ use Dedoc\Scramble\Infer\Services\FileParser;
 use Dedoc\Scramble\Support\RouteInfo;
 use PhpParser\Node;
 use PhpParser\NodeFinder;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 
 class InferHelper
 {
@@ -49,7 +51,7 @@ class InferHelper
 
         // ->allowedIncludes('posts', 'posts.author')
         if ($methodCall->args[0]->value instanceof Node\Scalar\String_) {
-            return array_map(fn(Node\Arg $arg) => $arg->value->value, $methodCall->args);
+            return array_map(fn (Node\Arg $arg) => $arg->value->value, $methodCall->args);
         }
 
         // ->allowedIncludes($this->includes)
@@ -79,18 +81,18 @@ class InferHelper
         $node = (new NodeFinder)
             ->findFirst(
                 $statements,
-                fn(Node $visitedNode) => $visitedNode instanceof Node\Stmt\ClassMethod && $visitedNode->name->name === $node->name->name
+                fn (Node $visitedNode) => $visitedNode instanceof Node\Stmt\ClassMethod && $visitedNode->name->name === $node->name->name
             );
 
         /** @var Node\Stmt\Return_|null $return */
         $return = (new NodeFinder)
-            ->findFirst($node->stmts, fn(Node $node) => $node instanceof Node\Stmt\Return_);
+            ->findFirst($node->stmts, fn (Node $node) => $node instanceof Node\Stmt\Return_);
 
-        if (!$return) {
+        if (! $return) {
             return [];
         }
 
-        if (!$return->expr instanceof Node\Expr\Array_) {
+        if (! $return->expr instanceof Node\Expr\Array_) {
             return [];
         }
 
@@ -99,7 +101,7 @@ class InferHelper
                 if ($item->value instanceof Node\Scalar\String_) {
                     return $item->value->value;
                 }
-                // AllowedFilter::callback(...), AllowedSort::callback
+                //AllowedFilter::callback(...), AllowedSort::callback
                 if ($item->value instanceof Node\Expr\StaticCall) {
                     return $this->inferValueFromStaticCall($item->value);
                 }
@@ -133,15 +135,15 @@ class InferHelper
         $node = (new NodeFinder)
             ->findFirst(
                 $statements,
-                fn(Node $visitedNode) => $visitedNode instanceof Node\Stmt\Property && $visitedNode->props[0]->name->name === $node->name->name
+                fn (Node $visitedNode) => $visitedNode instanceof Node\Stmt\Property && $visitedNode->props[0]->name->name === $node->name->name
             );
 
-        if (!$node->props[0]->default instanceof Node\Expr\Array_) {
+        if (! $node->props[0]->default instanceof Node\Expr\Array_) {
             return [];
         }
 
         return array_map(
-            fn(Node\ArrayItem $item) => $item->value->value,
+            fn (Node\ArrayItem $item) => $item->value->value,
             $node->props[0]->default->items
         );
     }
@@ -149,9 +151,9 @@ class InferHelper
     public function inferValueFromStaticCall(Node\Expr\StaticCall $node)
     {
         switch ($node->class->name) {
-            case 'AllowedFilter':
+            case AllowedFilter::class:
                 return $this->inferValueFromAllowedFilter($node);
-            case 'AllowedSort':
+            case AllowedSort::class:
                 return $this->inferValueFromAllowedSort($node);
             default:
                 return self::NOT_SUPPORTED_KEY;
