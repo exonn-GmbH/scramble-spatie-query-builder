@@ -4,6 +4,7 @@ namespace Exonn\ScrambleSpatieQueryBuilder;
 
 use Dedoc\Scramble\Infer\Services\FileParser;
 use Dedoc\Scramble\Support\RouteInfo;
+use Illuminate\Support\Facades\Log;
 use PhpParser\Node;
 use PhpParser\NodeFinder;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -31,18 +32,28 @@ class InferHelper
                         && $item->value->class->toString() === 'Spatie\QueryBuilder\AllowedFilter'
                         && $item->value->name instanceof Node\Identifier
                         && $item->value->name->name === 'scope') {
-                        $customSortName = $item->value->args[0]->value->value;
-                        return $customSortName;
+                        return $item->value->args[0]->value->value;
                     }
                     // Check if the static call is AllowedSort::custom
                     if ($item->value->class instanceof Node\Name
                         && $item->value->class->toString() === 'Spatie\QueryBuilder\AllowedSort'
                         && $item->value->name instanceof Node\Identifier
                         && $item->value->name->name === 'custom') {
-                        $customSortName = $item->value->args[0]->value->value;
-                        return $customSortName;
+                        return $item->value->args[0]->value->value;
                     }
                     return $this->inferValueFromStaticCall($item->value);
+                }
+
+                if ($item->value->name->name === 'default') {
+                    if ($item->value->var instanceof Node\Expr\StaticCall
+                        && $item->value->var->class instanceof Node\Name
+                        && $item->value->var->class->toString() === 'Spatie\QueryBuilder\AllowedSort'
+                        && $item->value->var->name instanceof Node\Identifier
+                        && $item->value->var->name->name === 'custom') {
+                        $customSortName = $item->value->var->args[0]->value->value;
+                        return $customSortName;
+                    }
+                    return $item->value->var->args[0]->value->value;
                 }
 
                 return self::NOT_SUPPORTED_KEY;
