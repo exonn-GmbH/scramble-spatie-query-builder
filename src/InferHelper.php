@@ -4,8 +4,11 @@ namespace Exonn\ScrambleSpatieQueryBuilder;
 
 use Dedoc\Scramble\Infer\Services\FileParser;
 use Dedoc\Scramble\Support\RouteInfo;
+use Illuminate\Support\Facades\Log;
 use PhpParser\Node;
 use PhpParser\NodeFinder;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 
 class InferHelper
 {
@@ -18,9 +21,43 @@ class InferHelper
             return [];
         }
 
-        // ->allowedIncludes(['posts', 'posts.author'])
         if ($methodCall->args[0]->value instanceof Node\Expr\Array_) {
-            return array_map(fn (Node\Expr\ArrayItem $item) => $item->value->value, $methodCall->args[0]->value->items);
+            return array_map(function (Node\Expr\ArrayItem $item) {
+                if ($item->value instanceof Node\Scalar\String_) {
+                    return $item->value->value;
+                }
+                if ($item->value instanceof Node\Expr\StaticCall) {
+
+                    if ($item->value->class instanceof Node\Name
+                        && $item->value->class->toString() === 'Spatie\QueryBuilder\AllowedFilter'
+                        && $item->value->name instanceof Node\Identifier
+                        && $item->value->name->name === 'scope') {
+                        return $item->value->args[0]->value->value;
+                    }
+                    // Check if the static call is AllowedSort::custom
+                    if ($item->value->class instanceof Node\Name
+                        && $item->value->class->toString() === 'Spatie\QueryBuilder\AllowedSort'
+                        && $item->value->name instanceof Node\Identifier
+                        && $item->value->name->name === 'custom') {
+                        return $item->value->args[0]->value->value;
+                    }
+                    return $this->inferValueFromStaticCall($item->value);
+                }
+
+                if ($item->value->name->name === 'default') {
+                    if ($item->value->var instanceof Node\Expr\StaticCall
+                        && $item->value->var->class instanceof Node\Name
+                        && $item->value->var->class->toString() === 'Spatie\QueryBuilder\AllowedSort'
+                        && $item->value->var->name instanceof Node\Identifier
+                        && $item->value->var->name->name === 'custom') {
+                        $customSortName = $item->value->var->args[0]->value->value;
+                        return $customSortName;
+                    }
+                    return $item->value->var->args[0]->value->value;
+                }
+
+                return self::NOT_SUPPORTED_KEY;
+            }, $methodCall->args[0]->value->items);
         }
 
         // ->allowedIncludes('posts', 'posts.author')
@@ -75,7 +112,7 @@ class InferHelper
                 if ($item->value instanceof Node\Scalar\String_) {
                     return $item->value->value;
                 }
-                // AllowedFilter::callback(...), AllowedSort::callback
+                //AllowedFilter::callback(...), AllowedSort::callback
                 if ($item->value instanceof Node\Expr\StaticCall) {
                     return $this->inferValueFromStaticCall($item->value);
                 }
@@ -125,9 +162,9 @@ class InferHelper
     public function inferValueFromStaticCall(Node\Expr\StaticCall $node)
     {
         switch ($node->class->name) {
-            case 'AllowedFilter':
+            case AllowedFilter::class:
                 return $this->inferValueFromAllowedFilter($node);
-            case 'AllowedSort':
+            case AllowedSort::class:
                 return $this->inferValueFromAllowedSort($node);
             default:
                 return self::NOT_SUPPORTED_KEY;

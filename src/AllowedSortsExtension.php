@@ -3,11 +3,11 @@
 namespace Exonn\ScrambleSpatieQueryBuilder;
 
 use Dedoc\Scramble\Extensions\OperationExtension;
-use Dedoc\Scramble\Support\Generator\Combined\AnyOf;
 use Dedoc\Scramble\Support\Generator\Operation;
 use Dedoc\Scramble\Support\Generator\Parameter;
 use Dedoc\Scramble\Support\Generator\Schema;
 use Dedoc\Scramble\Support\Generator\Types\ArrayType;
+use Dedoc\Scramble\Support\Generator\Types\ObjectType;
 use Dedoc\Scramble\Support\Generator\Types\StringType;
 use Dedoc\Scramble\Support\RouteInfo;
 
@@ -38,12 +38,15 @@ class AllowedSortsExtension extends OperationExtension
             array_map(fn ($value) => '-'.$value, $values)
         ));
 
+        $objectType = new ObjectType;
+        foreach ($arrayType->items->enum as $value) {
+            $objectType->addProperty($value, new StringType);
+        }
         $parameter = new Parameter(config($this->configKey), 'query');
 
-        $parameter->setSchema(Schema::fromType((new AnyOf)->setItems([
-            new StringType,
-            $arrayType,
-        ])))->example($this->examples);
+        $parameter->setSchema(Schema::fromType(new StringType))
+            ->description('Sort the results by the given fields. Available fields: '.implode(', ', array_map(fn ($value) => "`$value`", $arrayType->items->enum)).'. You can sort by multiple options by separating them with a comma. To sort in descending order, use - sign in front of the sort, for example: `-name`.')
+            ->example($this->examples);
 
         $halt = $this->runHooks($operation, $parameter);
         if (! $halt) {
