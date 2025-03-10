@@ -1,0 +1,5 @@
+services:
+  php-cli:
+    build: "docker/php-cli"
+    volumes:
+      - ".:/app"
