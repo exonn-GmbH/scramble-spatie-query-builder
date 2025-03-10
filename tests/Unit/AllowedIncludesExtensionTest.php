@@ -9,13 +9,10 @@ test('test AllowedIncludesExtensions', function () {
 
     config()->set('query-builder.parameters.include', $queryParam);
 
-    $result = generateForRoute(function () {
-        return Route::get('test', [
-            AllowedIncludesExtensionController::class, 'a',
-        ]);
-    }, [
-        AllowedIncludesExtension::class,
-    ]);
+    $result = generateForRoute(
+        fn() => Route::get('test', [AllowedIncludesExtensionController::class, 'a']),
+        [AllowedIncludesExtension::class]
+    );
 
     expect($result['paths']['/test']['get']['parameters'][0])->toBe([
         'name' => $queryParam,
