@@ -9,13 +9,10 @@ test('test AllowedSortsExtensions', function () {
 
     config()->set('query-builder.parameters.sort', $queryParam);
 
-    $result = generateForRoute(function () {
-        return Route::get('test', [
-            AllowedSortsExtensionController::class, 'a',
-        ]);
-    }, [
-        AllowedSortsExtension::class,
-    ]);
+    $result = generateForRoute(
+        fn() => Route::get('test', [AllowedSortsExtensionController::class, 'a']),
+        [AllowedSortsExtension::class]
+    );
 
     expect($result['paths']['/test']['get']['parameters'][0])->toBe([
         'name' => $queryParam,

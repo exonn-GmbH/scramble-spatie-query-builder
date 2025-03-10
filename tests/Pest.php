@@ -14,6 +14,31 @@ uses(TestCase::class)->in(__DIR__);
 
 function generateForRoute(Closure $param, array $extensions = [])
 {
+    if (!method_exists(Scramble::class, 'configure')) {
+        return generateForRoutePre0dot12($param, $extensions);
+    }
+
+    $route = $param();
+
+    $config = Scramble::configure()
+        ->useConfig(config('scramble'))
+        ->routes(fn (Route $r) => $r->uri === $route->uri)
+        ->withOperationTransformers(array_merge(
+            [
+                RequestEssentialsExtension::class,
+                RequestBodyExtension::class,
+                ErrorResponsesExtension::class,
+                ResponseExtension::class,
+                DeprecationExtension::class,
+            ],
+            $extensions
+        ));
+
+    return app()->make(\Dedoc\Scramble\Generator::class)($config);
+}
+
+function generateForRoutePre0dot12(Closure $param, array $extensions)
+{
     $route = $param();
 
     app()->when(OperationBuilder::class)

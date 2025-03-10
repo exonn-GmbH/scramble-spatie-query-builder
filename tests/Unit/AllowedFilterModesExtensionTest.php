@@ -10,13 +10,10 @@ test('test AllowedFilterModesExtensions', function () {
 
     config()->set(AllowedFilter::FilterModesQueryParamConfigKey, $queryParam);
 
-    $result = generateForRoute(function () {
-        return Route::get('test', [
-            AllowedFilterModesExtensionController::class, 'a',
-        ]);
-    }, [
-        AllowedFilterModesExtension::class,
-    ]);
+    $result = generateForRoute(
+        fn() => Route::get('test', [AllowedFilterModesExtensionController::class, 'a']),
+        [AllowedFilterModesExtension::class]
+    );
 
     expect($result['paths']['/test']['get']['parameters'][0])->toBe([
         'name' => $queryParam,

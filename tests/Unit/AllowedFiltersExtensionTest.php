@@ -9,13 +9,10 @@ test('test AllowedFiltersExtensions', function () {
 
     config()->set('query-builder.parameters.filter', $queryParam);
 
-    $result = generateForRoute(function () {
-        return Route::get('test', [
-            AllowedFiltersExtensionController::class, 'a',
-        ]);
-    }, [
-        AllowedFiltersExtension::class,
-    ]);
+    $result = generateForRoute(
+        fn() => Route::get('test', [AllowedFiltersExtensionController::class, 'a']),
+        [AllowedFiltersExtension::class]
+    );
 
     expect($result['paths']['/test']['get']['parameters'][0])->toBe([
         'name' => $queryParam,
